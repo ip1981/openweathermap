@@ -7,7 +7,7 @@ Requirements
 ============
 
 OpenWeatherMap is written in Haskell with [GHC](http://www.haskell.org/ghc/).
-All required Haskell libraries are listed in [openweathermap.cabal](ldapply.cabal).
+All required Haskell libraries are listed in [openweathermap.cabal](openweathermap.cabal).
 Use [cabal-install](http://www.haskell.org/haskellwiki/Cabal-Install) to fetch
 and build all pre-requisites automatically.
 
