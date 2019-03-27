@@ -14,8 +14,7 @@ module Web.OpenWeatherMap.API (
 import Data.Proxy (Proxy(..))
 
 import Servant.API ((:>), (:<|>)(..), JSON, Get, QueryParam)
-import Servant.Client (client)
-import Servant.Common.Req (ClientM)
+import Servant.Client (ClientM, client)
 
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
 
