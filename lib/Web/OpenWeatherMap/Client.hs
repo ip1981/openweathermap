@@ -7,9 +7,7 @@ module Web.OpenWeatherMap.Client (
 ) where
 
 import Network.HTTP.Client (newManager, defaultManagerSettings)
-import Servant.Client (ClientEnv(..), runClientM, ServantError)
-import Servant.Common.BaseUrl (BaseUrl(..), Scheme(..))
-import Servant.Common.Req (ClientM)
+import Servant.Client (BaseUrl(BaseUrl), ClientEnv, mkClientEnv, ClientM, Scheme(Http), ServantError, runClientM)
 
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
 import qualified Web.OpenWeatherMap.API as API
@@ -40,7 +38,7 @@ api (Coord lat lon) = API.weatherByCoord (Just lat) (Just lon) . Just
 defaultEnv :: IO ClientEnv
 defaultEnv = do
   manager <- newManager defaultManagerSettings
-  return $ ClientEnv manager baseUrl
+  return $ mkClientEnv manager baseUrl
 
 -- XXX openweathermap.org does not support HTTPS,
 -- XXX appid is passed in clear text. Oops.
