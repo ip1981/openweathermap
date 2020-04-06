@@ -1,21 +1,14 @@
 {-|
 High-level client functions perfoming requests to OpenWeatherMap API.
 -}
-module Web.OpenWeatherMap.Client
-  ( Location(..)
-  , getWeather
-  ) where
+module Web.OpenWeatherMap.Client (
+  Location(..),
+  getWeather,
+  baseUrl 
+) where
 
-import Network.HTTP.Client (defaultManagerSettings, newManager)
-import Servant.Client
-  ( BaseUrl(BaseUrl)
-  , ClientEnv
-  , ClientError
-  , ClientM
-  , Scheme(Http)
-  , mkClientEnv
-  , runClientM
-  )
+import Network.HTTP.Client (newManager, defaultManagerSettings)
+import Servant.Client (BaseUrl(BaseUrl), ClientEnv, mkClientEnv, ClientM, Scheme(Http), ServantError, runClientM)
 
 import qualified Web.OpenWeatherMap.API as API
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
