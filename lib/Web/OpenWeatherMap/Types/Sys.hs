@@ -11,7 +11,7 @@ import Data.Aeson (FromJSON)
  
 
 data Sys = Sys
-  { message :: Double
+  { message :: Maybe Double
   , country :: Maybe String
   , sunrise :: Int
   , sunset :: Int
