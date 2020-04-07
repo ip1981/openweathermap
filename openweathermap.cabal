@@ -1,5 +1,5 @@
 name: openweathermap
-version: 0.0.0
+version: 0.1.0
 synopsis: Access data at OpenWeatherMap
 description: Client library and command-line utility to access
   OpenWeatherMap https://openweathermap.org
@@ -11,7 +11,7 @@ copyright: 2017, Igor Pashev <pashev.igor@gmail.com>
 category: Web
 build-type: Simple
 extra-source-files: README.md ChangeLog.md
-cabal-version: >= 1.20
+cabal-version: 1.20
 
 source-repository head
   type: git
