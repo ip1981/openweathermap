@@ -8,11 +8,10 @@ module Web.OpenWeatherMap.Types.Sys (
 import GHC.Generics (Generic)
 
 import Data.Aeson (FromJSON)
- 
+
 
 data Sys = Sys
-  { message :: Double
-  , country :: Maybe String
+  { country :: Maybe String
   , sunrise :: Int
   , sunset :: Int
   } deriving (Show, Generic, FromJSON)
