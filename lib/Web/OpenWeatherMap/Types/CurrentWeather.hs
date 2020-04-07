@@ -1,12 +1,12 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Web.OpenWeatherMap.Types.CurrentWeather (
-  CurrentWeather(..)
-) where
+module Web.OpenWeatherMap.Types.CurrentWeather
+  ( CurrentWeather(..)
+  ) where
 
-import Prelude hiding (id)
 import GHC.Generics (Generic)
+import Prelude hiding (id)
 
 import Data.Aeson (FromJSON)
 
@@ -32,4 +32,3 @@ data CurrentWeather = CurrentWeather
   , name :: String
   , cod :: Int
   } deriving (Show, Generic, FromJSON)
-

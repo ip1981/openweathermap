@@ -1,14 +1,13 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Web.OpenWeatherMap.Types.Weather (
-  Weather(..)
-) where
+module Web.OpenWeatherMap.Types.Weather
+  ( Weather(..)
+  ) where
 
 import GHC.Generics (Generic)
 
 import Data.Aeson (FromJSON)
-
 
 data Weather = Weather
   { id :: Int
@@ -16,4 +15,3 @@ data Weather = Weather
   , description :: String
   , icon :: String
   } deriving (Show, Generic, FromJSON)
-

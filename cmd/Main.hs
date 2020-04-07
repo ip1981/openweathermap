@@ -1,8 +1,8 @@
 {-# LANGUAGE LambdaCase #-}
 
-module Main (
-  main
-) where
+module Main
+  ( main
+  ) where
 
 import Control.Monad (when)
 import Data.List (intercalate)
@@ -11,9 +11,24 @@ import Data.Version (showVersion)
 import System.Exit (die)
 import System.IO (IOMode(ReadMode), hGetLine, hPrint, stderr, withFile)
 
-import Options.Applicative (
-    (<**>), (<|>), Parser, auto, execParser, fullDesc, header, help, helper,
-    info, long, metavar, option, optional, short, strOption, switch
+import Options.Applicative
+  ( Parser
+  , (<**>)
+  , (<|>)
+  , auto
+  , execParser
+  , fullDesc
+  , header
+  , help
+  , helper
+  , info
+  , long
+  , metavar
+  , option
+  , optional
+  , short
+  , strOption
+  , switch
   )
 import System.Directory (createDirectoryIfMissing)
 import System.Environment.XDG.BaseDir (getUserConfigDir, getUserConfigFile)
@@ -33,22 +48,17 @@ appName = "openweathermap"
 parseLocation :: Parser Client.Location
 parseLocation = byName <|> byCoord
   where
-    byName = Client.Name <$> strOption
-      (  long "city"
-      <> short 'c'
-      <> metavar "CITY"
-      <> help "City name" )
-
-    byCoord = Client.Coord
-      <$> option auto
-        (  long "lat"
-        <> metavar "NUM"
-        <> help "Latitude in decimal degrees" )
-      <*> option auto
-        (  long "lon"
-        <> metavar "NUM"
-        <> help "Longitude in decimal degrees" )
-
+    byName =
+      Client.Name <$>
+      strOption (long "city" <> short 'c' <> metavar "CITY" <> help "City name")
+    byCoord =
+      Client.Coord <$>
+      option
+        auto
+        (long "lat" <> metavar "NUM" <> help "Latitude in decimal degrees") <*>
+      option
+        auto
+        (long "lon" <> metavar "NUM" <> help "Longitude in decimal degrees")
 
 data ApiKey
   = ApiKeyFile FilePath
@@ -57,18 +67,15 @@ data ApiKey
 parseApiKey :: Parser ApiKey
 parseApiKey = fromFile <|> inCmdLine
   where
-    fromFile = ApiKeyFile <$> strOption
-      (  long "api-key-file"
-      <> short 'K'
-      <> metavar "APIKEYFILE"
-      <> help "Read API key from this file" )
-
-    inCmdLine = ApiKey <$> strOption
-      (  long "api-key"
-      <> short 'k'
-      <> metavar "APIKEY"
-      <> help "API key" )
-
+    fromFile =
+      ApiKeyFile <$>
+      strOption
+        (long "api-key-file" <> short 'K' <> metavar "APIKEYFILE" <>
+         help "Read API key from this file")
+    inCmdLine =
+      ApiKey <$>
+      strOption
+        (long "api-key" <> short 'k' <> metavar "APIKEY" <> help "API key")
 
 data Config = Config
   { apikey :: Maybe ApiKey
@@ -77,10 +84,9 @@ data Config = Config
   }
 
 parseConfig :: Parser Config
-parseConfig = Config
-          <$> optional parseApiKey
-          <*> parseLocation
-          <*> switch (long "debug" <> short 'd' <> help "Enable debug")
+parseConfig =
+  Config <$> optional parseApiKey <*> parseLocation <*>
+  switch (long "debug" <> short 'd' <> help "Enable debug")
 
 getApiKey :: Maybe ApiKey -> IO String
 getApiKey (Just (ApiKey key)) = return key
@@ -89,16 +95,18 @@ getApiKey Nothing = do
   createDirectoryIfMissing True =<< getUserConfigDir appName
   getUserConfigFile appName "key" >>= getApiKey . Just . ApiKeyFile
 
-
 showLocation :: CurrentWeather.CurrentWeather -> String
 showLocation w = city ++ maybe "" ("," ++) country ++ " " ++ coords
   where
     name = CurrentWeather.name w
     coord = CurrentWeather.coord w
     country = Sys.country . CurrentWeather.sys $ w
-    city = if name /= "" then name else "<unknown>"
-    coords = "("++ show (Coord.lat coord) ++ "°, "
-                ++ show (Coord.lon coord) ++ "°)"
+    city =
+      if name /= ""
+        then name
+        else "<unknown>"
+    coords =
+      "(" ++ show (Coord.lat coord) ++ "°, " ++ show (Coord.lon coord) ++ "°)"
 
 showWeather :: [Weather.Weather] -> String
 showWeather w = intercalate "," $ Weather.main <$> w
@@ -125,7 +133,7 @@ showWind w = dir ++ " " ++ show speed ++ " m/s"
     speed = round . Wind.speed $ w
     deg = Wind.deg w
     --     [ "N", "NE", "E", "SE", "S", "SW", "W", "NW" ]
-    dirs = [ "↓", "↙",  "←", "↖",  "↑", "↗",  "→", "↘"  ]
+    dirs = ["↓", "↙", "←", "↖", "↑", "↗", "→", "↘"]
     l = length dirs
     sector = round $ (deg * fromIntegral l) / 360.0
     dir = dirs !! (sector `rem` l)
@@ -138,10 +146,14 @@ showTemp m = "T " ++ temp ++ " °C"
     tmin :: Int
     tmax = round . k2c . Main.temp_max $ m
     tmin = round . k2c . Main.temp_min $ m
-    show' t = if t > 0 then "+" ++ show t else show t
-    temp = if tmax /= tmin
-           then show' tmin ++ ".." ++ show' tmax
-           else show' tmin
+    show' t =
+      if t > 0
+        then "+" ++ show t
+        else show t
+    temp =
+      if tmax /= tmin
+        then show' tmin ++ ".." ++ show' tmax
+        else show' tmin
 
 printWeather :: CurrentWeather.CurrentWeather -> IO ()
 printWeather w = putStrLn out
@@ -150,15 +162,23 @@ printWeather w = putStrLn out
     place = showLocation w
     mainw = CurrentWeather.main w
     wind = CurrentWeather.wind w
-    out = place ++ ": " ++ intercalate ",  "
-      [ weather, showHumidity mainw, showPressure mainw, showTemp mainw,
-        showWind wind ]
+    out =
+      place ++
+      ": " ++
+      intercalate
+        ",  "
+        [ weather
+        , showHumidity mainw
+        , showPressure mainw
+        , showTemp mainw
+        , showWind wind
+        ]
 
 run :: Config -> IO ()
 run cfg = do
   appid <- getApiKey . apikey $ cfg
   Client.getWeather appid (location cfg) >>= \case
-    Left err      -> die $ show err
+    Left err -> die $ show err
     Right weather -> do
       when (debug cfg) $ hPrint stderr weather
       printWeather weather
@@ -167,7 +187,7 @@ main :: IO ()
 main = run =<< execParser opts
   where
     opts = info (parseConfig <**> helper) (fullDesc <> header desc)
-    desc = "openweathermap "
-        ++ showVersion version
-        ++ " - command-line client for https://openweathermap.org/api"
-
+    desc =
+      "openweathermap " ++
+      showVersion version ++
+      " - command-line client for https://openweathermap.org/api"
