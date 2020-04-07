@@ -7,7 +7,7 @@ module Web.OpenWeatherMap.Client (
 ) where
 
 import Network.HTTP.Client (newManager, defaultManagerSettings)
-import Servant.Client (BaseUrl(BaseUrl), ClientEnv, mkClientEnv, ClientM, Scheme(Http), ServantError, runClientM)
+import Servant.Client (BaseUrl(BaseUrl), ClientEnv, mkClientEnv, ClientM, Scheme(Http), ClientError, runClientM)
 
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
 import qualified Web.OpenWeatherMap.API as API
@@ -24,7 +24,7 @@ data Location
 getWeather
   :: String -- ^ API key.
   -> Location
-  -> IO (Either ServantError CurrentWeather)
+  -> IO (Either ClientError CurrentWeather)
 getWeather appid loc =
   defaultEnv >>= runClientM (api loc appid)
 

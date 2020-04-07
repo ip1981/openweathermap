@@ -30,7 +30,7 @@ library
     , aeson
     , http-client
     , servant
-    , servant-client >= 0.13
+    , servant-client >= 0.16
   exposed-modules:
      Web.OpenWeatherMap.API
      Web.OpenWeatherMap.Client
