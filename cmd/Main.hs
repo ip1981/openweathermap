@@ -4,7 +4,9 @@ module Main
   ( main
   ) where
 
-import Control.Monad (when)
+import           Servant.Client                          (runClientM)
+import Web.OpenWeatherMap.API 
+import Control.Monad (when, void)
 import Data.List (intercalate)
 import Data.Semigroup ((<>))
 import Data.Version (showVersion)
@@ -45,20 +47,31 @@ import qualified Web.OpenWeatherMap.Types.Wind as Wind
 appName :: String
 appName = "openweathermap"
 
+parseAction :: Parser (Either Client.Location String)
+parseAction = (Left <$> parseLocation ) <|> (Right <$> strOption
+      (  long "city-forecast"
+      <> short 'f'
+      <> metavar "CITY-FORECAST"
+      <> help "City name forecast" ))
+  
 parseLocation :: Parser Client.Location
 parseLocation = byName <|> byCoord
   where
-    byName =
-      Client.Name <$>
-      strOption (long "city" <> short 'c' <> metavar "CITY" <> help "City name")
-    byCoord =
-      Client.Coord <$>
-      option
-        auto
-        (long "lat" <> metavar "NUM" <> help "Latitude in decimal degrees") <*>
-      option
-        auto
-        (long "lon" <> metavar "NUM" <> help "Longitude in decimal degrees")
+    byName = Client.Name <$> strOption
+      (  long "city"
+      <> short 'c'
+      <> metavar "CITY"
+      <> help "City name" )
+    byCoord = Client.Coord
+      <$> option auto
+        (  long "lat"
+        <> metavar "NUM"
+        <> help "Latitude in decimal degrees" )
+      <*> option auto
+        (  long "lon"
+        <> metavar "NUM"
+        <> help "Longitude in decimal degrees" )
+
 
 data ApiKey
   = ApiKeyFile FilePath
@@ -67,26 +80,29 @@ data ApiKey
 parseApiKey :: Parser ApiKey
 parseApiKey = fromFile <|> inCmdLine
   where
-    fromFile =
-      ApiKeyFile <$>
-      strOption
-        (long "api-key-file" <> short 'K' <> metavar "APIKEYFILE" <>
-         help "Read API key from this file")
-    inCmdLine =
-      ApiKey <$>
-      strOption
-        (long "api-key" <> short 'k' <> metavar "APIKEY" <> help "API key")
+    fromFile = ApiKeyFile <$> strOption
+      (  long "api-key-file"
+      <> short 'K'
+      <> metavar "APIKEYFILE"
+      <> help "Read API key from this file" )
+
+    inCmdLine = ApiKey <$> strOption
+      (  long "api-key"
+      <> short 'k'
+      <> metavar "APIKEY"
+      <> help "API key" )
 
 data Config = Config
   { apikey :: Maybe ApiKey
-  , location :: Client.Location
+  , location :: Either Client.Location String
   , debug :: Bool
   }
 
 parseConfig :: Parser Config
-parseConfig =
-  Config <$> optional parseApiKey <*> parseLocation <*>
-  switch (long "debug" <> short 'd' <> help "Enable debug")
+parseConfig = Config
+          <$> optional parseApiKey
+          <*> parseAction 
+          <*> switch (long "debug" <> short 'd' <> help "Enable debug")
 
 getApiKey :: Maybe ApiKey -> IO String
 getApiKey (Just (ApiKey key)) = return key
@@ -177,11 +193,13 @@ printWeather w = putStrLn out
 run :: Config -> IO ()
 run cfg = do
   appid <- getApiKey . apikey $ cfg
-  Client.getWeather appid (location cfg) >>= \case
-    Left err -> die $ show err
-    Right weather -> do
-      when (debug cfg) $ hPrint stderr weather
-      printWeather weather
+  case (location cfg) of
+    Left location -> Client.getWeather appid location >>= \case
+        Left err      -> die $ show err
+        Right weather -> do
+          when (debug cfg) $ hPrint stderr weather
+          printWeather weather
+    Right y -> print =<< runClientM (dailyWeatherForecast (Just y) (Just appid))  =<< Client.defaultEnv
 
 main :: IO ()
 main = run =<< execParser opts

@@ -37,6 +37,8 @@ library
      Web.OpenWeatherMap.Types.Clouds
      Web.OpenWeatherMap.Types.Coord
      Web.OpenWeatherMap.Types.CurrentWeather
+     Web.OpenWeatherMap.Types.Forecast
+     Web.OpenWeatherMap.Types.Measurement
      Web.OpenWeatherMap.Types.Main
      Web.OpenWeatherMap.Types.Sys
      Web.OpenWeatherMap.Types.Weather
@@ -54,6 +56,7 @@ executable openweathermap
       , openweathermap
       , optparse-applicative >= 0.13.0.0
       , xdg-basedir
+      , servant-client >= 0.13 && < 0.15
   else
     buildable: False
 
