@@ -4,7 +4,8 @@ High-level client functions perfoming requests to OpenWeatherMap API.
 module Web.OpenWeatherMap.Client (
   Location(..),
   getWeather,
-  baseUrl 
+  baseUrl,
+  defaultEnv 
 ) where
 
 import Network.HTTP.Client (newManager, defaultManagerSettings)
