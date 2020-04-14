@@ -12,6 +12,7 @@ import Web.OpenWeatherMap.Types.Weather
 
 data Measurement = Measurement {
   main :: Main,
-  weather :: [Weather]
+  weather :: [Weather],
+  dt_txt :: String
   } deriving (Show, Generic, FromJSON)
 
