@@ -17,6 +17,7 @@ data Main = Main
   , humidity :: Double
   , temp_min :: Double
   , temp_max :: Double
+  , feels_like :: Double
   , sea_level :: Maybe Double
   , grnd_level :: Maybe Double
   } deriving (Show, Generic, FromJSON)
