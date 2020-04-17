@@ -58,7 +58,7 @@ executable openweathermap
       , openweathermap
       , optparse-applicative >= 0.13.0.0
       , xdg-basedir
-      , servant-client >= 0.13 && < 0.15
+      , servant-client >= 0.13
   else
     buildable: False
 
