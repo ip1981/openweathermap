@@ -9,7 +9,15 @@ module Web.OpenWeatherMap.Client (
 ) where
 
 import Network.HTTP.Client (newManager, defaultManagerSettings)
-import Servant.Client (BaseUrl(BaseUrl), ClientEnv, mkClientEnv, ClientM, Scheme(Http), ServantError, runClientM)
+import Servant.Client
+  ( BaseUrl(BaseUrl)
+  , ClientEnv
+  , ClientError
+  , ClientM
+  , Scheme(Http)
+  , mkClientEnv
+  , runClientM
+  )
 
 import qualified Web.OpenWeatherMap.API as API
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
