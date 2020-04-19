@@ -10,6 +10,6 @@ import GHC.Generics (Generic)
 import Data.Aeson (FromJSON)
 
 data Coord = Coord
-  { lon :: Double
-  , lat :: Double
+  { lon :: Maybe Double
+  , lat :: Maybe Double
   } deriving (Show, Generic, FromJSON)

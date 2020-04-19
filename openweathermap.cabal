@@ -34,9 +34,12 @@ library
   exposed-modules:
      Web.OpenWeatherMap.API
      Web.OpenWeatherMap.Client
+     Web.OpenWeatherMap.Types.City
      Web.OpenWeatherMap.Types.Clouds
      Web.OpenWeatherMap.Types.Coord
      Web.OpenWeatherMap.Types.CurrentWeather
+     Web.OpenWeatherMap.Types.Forecast
+     Web.OpenWeatherMap.Types.ForecastWeather
      Web.OpenWeatherMap.Types.Main
      Web.OpenWeatherMap.Types.Sys
      Web.OpenWeatherMap.Types.Weather
@@ -47,12 +50,14 @@ executable openweathermap
   ghc-options: -Wall -static
   hs-source-dirs: cmd
   main-is: Main.hs
+  other-modules: Print
   if flag(cmd)
     build-depends:
         base >= 4.9 && < 5
       , directory
       , openweathermap
       , optparse-applicative >= 0.13.0.0
+      , time
       , xdg-basedir
   else
     buildable: False

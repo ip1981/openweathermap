@@ -4,6 +4,7 @@ High-level client functions perfoming requests to OpenWeatherMap API.
 module Web.OpenWeatherMap.Client
   ( Location(..)
   , getWeather
+  , getForecast
   ) where
 
 import Network.HTTP.Client (defaultManagerSettings, newManager)
@@ -11,7 +12,6 @@ import Servant.Client
   ( BaseUrl(BaseUrl)
   , ClientEnv
   , ClientError
-  , ClientM
   , Scheme(Http)
   , mkClientEnv
   , runClientM
@@ -19,6 +19,7 @@ import Servant.Client
 
 import qualified Web.OpenWeatherMap.API as API
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
+import Web.OpenWeatherMap.Types.ForecastWeather (ForecastWeather)
 
 -- | Various way to specify location.
 data Location
@@ -33,13 +34,20 @@ getWeather ::
   -> Location
   -> IO (Either ClientError CurrentWeather)
 getWeather appid loc = defaultEnv >>= runClientM (api loc appid)
+  where
+    api (Name city) = API.weatherByName (Just city) . Just
+    api (Coord lat lon) = API.weatherByCoord (Just lat) (Just lon) . Just
 
-api ::
-     Location
-  -> String -- ^ API key.
-  -> ClientM CurrentWeather
-api (Name city) = API.weatherByName (Just city) . Just
-api (Coord lat lon) = API.weatherByCoord (Just lat) (Just lon) . Just
+-- | Make a request to OpenWeatherMap API
+--   and return forecast weather in given location.
+getForecast ::
+     String -- ^ API key.
+  -> Location
+  -> IO (Either ClientError ForecastWeather)
+getForecast appid loc = defaultEnv >>= runClientM (api loc appid)
+  where
+    api (Name city) = API.forecastByName (Just city) . Just
+    api (Coord lat lon) = API.forecastByCoord (Just lat) (Just lon) . Just
 
 defaultEnv :: IO ClientEnv
 defaultEnv = do
