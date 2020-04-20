@@ -46,7 +46,9 @@ parseLocation = byName <|> byCoord
   where
     byName =
       Client.Name <$>
-      strOption (long "city" <> short 'c' <> metavar "CITY" <> help "City name")
+      strOption
+        (long "query" <> short 'q' <> metavar "STRING" <>
+         help "City name, e. g. Santiago or Santiago,CU")
     byCoord =
       Client.Coord <$>
       option

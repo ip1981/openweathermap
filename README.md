@@ -23,14 +23,14 @@ Usage
 
 ```
 Usage: openweathermap [(-K|--api-key-file APIKEYFILE) | (-k|--api-key APIKEY)]
-                      ((-c|--city CITY) | --lat NUM --lon NUM)
+                      ((-q|--query STRING) | --lat NUM --lon NUM)
                       [(-n|--current) | (-f|--forecast)] [-d|--debug]
 
 Available options:
   -K,--api-key-file APIKEYFILE
                            Read API key from this file
   -k,--api-key APIKEY      API key
-  -c,--city CITY           City name
+  -q,--query STRING        City name, e. g. Santiago or Santiago,CU
   --lat NUM                Latitude in decimal degrees
   --lon NUM                Longitude in decimal degrees
   -n,--current             current weather (default)
@@ -49,13 +49,13 @@ Examples
 --------
 
 ```
-$ openweathermap -c norilsk
+$ openweathermap -q norilsk
 Norilsk,RU (69.35°, 88.2°): Clouds,  H 100 %,  P 753 mmHg,  T +4 °C,  ↓ 1 m/s
 
 $ openweathermap --lat 55.7522200 --lon 37.6155600
 Moscow,RU (55.75°, 37.62°): Clear,  H 45 %,  P 762 mmHg,  T +18..+21 °C,  → 4 m/s
 
-$ openweathermap -c kaliningrad -f
+$ openweathermap -q kaliningrad -f
 Kaliningrad,RU (54.7065°, 20.511°)
 2020-04-19 17:00:00 +0200: Clear, H 66 %, P 767 mmHg, T +7 °C, ↓ 7 m/s
 2020-04-19 20:00:00 +0200: Clear, H 79 %, P 768 mmHg, T +4 °C, ↓ 5 m/s
