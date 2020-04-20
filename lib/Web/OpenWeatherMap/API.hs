@@ -27,10 +27,10 @@ type GetForecastWeather = AppId :> Get '[ JSON] ForecastWeather
 type AppId = QueryParam "appid" String
 
 type Current
-   = "weather" :> QueryParam "q" String :> GetCurrentWeather :<|> "weather" :> QueryParam "lat" Double :> QueryParam "lon" Double :> GetCurrentWeather
+   = "weather" :> (QueryParam "q" String :> GetCurrentWeather :<|> QueryParam "lat" Double :> QueryParam "lon" Double :> GetCurrentWeather)
 
 type Forecast
-   = "forecast" :> QueryParam "q" String :> GetForecastWeather :<|> "forecast" :> QueryParam "lat" Double :> QueryParam "lon" Double :> GetForecastWeather
+   = "forecast" :> (QueryParam "q" String :> GetForecastWeather :<|> QueryParam "lat" Double :> QueryParam "lon" Double :> GetForecastWeather)
 
 type API = Current :<|> Forecast
 
