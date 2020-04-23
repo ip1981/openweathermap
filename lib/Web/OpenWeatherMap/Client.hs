@@ -35,8 +35,8 @@ getWeather ::
   -> IO (Either ClientError CurrentWeather)
 getWeather appid loc = defaultEnv >>= runClientM (api loc appid)
   where
-    api (Name city) = API.weatherByName (Just city) . Just
-    api (Coord lat lon) = API.weatherByCoord (Just lat) (Just lon) . Just
+    api (Name city) = API.weatherByName city
+    api (Coord lat lon) = API.weatherByCoord lat lon
 
 -- | Make a request to OpenWeatherMap API
 --   and return forecast weather in given location.
@@ -46,8 +46,8 @@ getForecast ::
   -> IO (Either ClientError ForecastWeather)
 getForecast appid loc = defaultEnv >>= runClientM (api loc appid)
   where
-    api (Name city) = API.forecastByName (Just city) . Just
-    api (Coord lat lon) = API.forecastByCoord (Just lat) (Just lon) . Just
+    api (Name city) = API.forecastByName city
+    api (Coord lat lon) = API.forecastByCoord lat lon
 
 defaultEnv :: IO ClientEnv
 defaultEnv = do
