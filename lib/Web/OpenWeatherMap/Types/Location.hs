@@ -16,7 +16,7 @@ import Servant.Client (Client, HasClient, clientWithRoute, hoistClientMonad)
 import Servant.Client.Core.Request (appendToQueryString)
 import Web.HttpApiData (toQueryParam)
 
--- | Various way to specify location.
+-- | Various ways to specify location.
 data Location
   = Name String -- ^ City name.
   | Coord Double Double -- ^ Geographic coordinates: latitude and longitude.
