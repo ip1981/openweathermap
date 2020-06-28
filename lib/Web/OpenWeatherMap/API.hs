@@ -6,10 +6,8 @@ For API key (a.k.a appid) refer to <http://openweathermap.org/appid>.
 {-# LANGUAGE TypeOperators #-}
 
 module Web.OpenWeatherMap.API
-  ( weatherByName
-  , weatherByCoord
-  , forecastByName
-  , forecastByCoord
+  ( currentWeather
+  , forecastWeather
   ) where
 
 import Data.Proxy (Proxy(..))
@@ -19,44 +17,18 @@ import Servant.Client (ClientM, client)
 
 import Web.OpenWeatherMap.Types.CurrentWeather (CurrentWeather)
 import Web.OpenWeatherMap.Types.ForecastWeather (ForecastWeather)
+import Web.OpenWeatherMap.Types.Location (Location)
 
 type QueryParam = QueryParam' '[ Required, Strict]
 
-type GetCurrentWeather = AppId :> Get '[ JSON] CurrentWeather
-
-type GetForecastWeather = AppId :> Get '[ JSON] ForecastWeather
-
-type AppId = QueryParam "appid" String
-
 type Current
-   = "weather" :> (QueryParam "q" String :> GetCurrentWeather :<|> QueryParam "lat" Double :> QueryParam "lon" Double :> GetCurrentWeather)
+   = "weather" :> QueryParam "appid" String :> Location :> Get '[ JSON] CurrentWeather
 
 type Forecast
-   = "forecast" :> (QueryParam "q" String :> GetForecastWeather :<|> QueryParam "lat" Double :> QueryParam "lon" Double :> GetForecastWeather)
+   = "forecast" :> QueryParam "appid" String :> Location :> Get '[ JSON] ForecastWeather
 
 type API = Current :<|> Forecast
 
--- | Request current weather in the city.
-weatherByName ::
-     String -- ^ City name, e. g. \"Moscow\" or \"Moscow,ru\".
-  -> String -- ^ API key.
-  -> ClientM CurrentWeather
--- | Request current weather at the geographic coordinates (in decimal degrees).
-weatherByCoord ::
-     Double -- ^ Latitude, e. g. 55.7522200 for Moscow.
-  -> Double -- ^ Longitude, e. g. 37.6155600 for Moscow.
-  -> String -- ^ API key.
-  -> ClientM CurrentWeather
--- | Request forecast weather in the city.
-forecastByName ::
-     String -- ^ City name, e. g. \"Moscow\" or \"Moscow,ru\".
-  -> String -- ^ API key.
-  -> ClientM ForecastWeather
--- | Request current weather at the geographic coordinates (in decimal degrees).
-forecastByCoord ::
-     Double -- ^ Latitude, e. g. 55.7522200 for Moscow.
-  -> Double -- ^ Longitude, e. g. 37.6155600 for Moscow.
-  -> String -- ^ API key.
-  -> ClientM ForecastWeather
-(weatherByName :<|> weatherByCoord) :<|> (forecastByName :<|> forecastByCoord) =
-  client (Proxy :: Proxy API)
+forecastWeather :: String -> Location -> ClientM ForecastWeather
+currentWeather :: String -> Location -> ClientM CurrentWeather
+(currentWeather :<|> forecastWeather) = client (Proxy :: Proxy API)

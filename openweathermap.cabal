@@ -28,9 +28,11 @@ library
   build-depends:
       base >= 4.9 && < 5
     , aeson
+    , http-api-data
     , http-client
     , servant
     , servant-client >= 0.16
+    , servant-client-core
   exposed-modules:
      Web.OpenWeatherMap.API
      Web.OpenWeatherMap.Client
@@ -40,6 +42,7 @@ library
      Web.OpenWeatherMap.Types.CurrentWeather
      Web.OpenWeatherMap.Types.Forecast
      Web.OpenWeatherMap.Types.ForecastWeather
+     Web.OpenWeatherMap.Types.Location
      Web.OpenWeatherMap.Types.Main
      Web.OpenWeatherMap.Types.Sys
      Web.OpenWeatherMap.Types.Weather

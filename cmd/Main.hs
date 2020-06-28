@@ -34,6 +34,7 @@ import System.Directory (createDirectoryIfMissing)
 import System.Environment.XDG.BaseDir (getUserConfigDir, getUserConfigFile)
 
 import qualified Web.OpenWeatherMap.Client as Client
+import Web.OpenWeatherMap.Types.Location (Location(..))
 
 import Paths_openweathermap (version) -- from cabal
 import Print (printCurrectWeather, printForecastWeather)
@@ -41,16 +42,16 @@ import Print (printCurrectWeather, printForecastWeather)
 appName :: String
 appName = "openweathermap"
 
-parseLocation :: Parser Client.Location
+parseLocation :: Parser Location
 parseLocation = byName <|> byCoord
   where
     byName =
-      Client.Name <$>
+      Name <$>
       strOption
         (long "query" <> short 'q' <> metavar "STRING" <>
          help "City name, e. g. Santiago or Santiago,CU")
     byCoord =
-      Client.Coord <$>
+      Coord <$>
       option
         auto
         (long "lat" <> metavar "NUM" <> help "Latitude in decimal degrees") <*>
@@ -87,12 +88,13 @@ parseWeather =
   flag' Forecast (long "forecast" <> short 'f' <> help "forecast weather") <|>
   pure Current
 
-data Config = Config
-  { apikey :: Maybe ApiKey
-  , location :: Client.Location
-  , weather :: Weather
-  , debug :: Bool
-  }
+data Config =
+  Config
+    { apikey :: Maybe ApiKey
+    , location :: Location
+    , weather :: Weather
+    , debug :: Bool
+    }
 
 parseConfig :: Parser Config
 parseConfig =
