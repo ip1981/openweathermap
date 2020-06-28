@@ -1,5 +1,5 @@
 name: openweathermap
-version: 0.1.0
+version: 0.2.0
 synopsis: Access data at OpenWeatherMap
 description: Client library and command-line utility to access
   OpenWeatherMap https://openweathermap.org

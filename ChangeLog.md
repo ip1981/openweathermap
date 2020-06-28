@@ -1,3 +1,10 @@
+0.2.0
+=====
+
+  * (* BREAKING *) Made Location a part of the API to
+    reduce code duplication.
+
+
 0.1.0
 =====
 
