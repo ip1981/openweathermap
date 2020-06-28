@@ -14,10 +14,12 @@ import Web.OpenWeatherMap.Types.Main (Main)
 import Web.OpenWeatherMap.Types.Weather (Weather)
 import Web.OpenWeatherMap.Types.Wind (Wind)
 
-data Forecast = Forecast
-  { dt :: Int
-  , clouds :: Clouds
-  , main :: Main
-  , weather :: [Weather]
-  , wind :: Wind
-  } deriving (Show, Generic, FromJSON)
+data Forecast =
+  Forecast
+    { dt :: Int
+    , clouds :: Clouds
+    , main :: Main
+    , weather :: [Weather]
+    , wind :: Wind
+    }
+  deriving (Show, Generic, FromJSON)

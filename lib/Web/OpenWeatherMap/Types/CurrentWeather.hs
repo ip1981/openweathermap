@@ -19,16 +19,18 @@ import Web.OpenWeatherMap.Types.Wind (Wind)
 
 -- | Response to requests for current weather.
 -- Refer to <https://openweathermap.org/current>.
-data CurrentWeather = CurrentWeather
-  { coord :: Coord
-  , weather :: [Weather]
-  , base :: String
-  , main :: Main
-  , wind :: Wind
-  , clouds :: Clouds
-  , dt :: Int
-  , sys :: Sys
-  , id :: Int
-  , name :: String
-  , cod :: Int
-  } deriving (Show, Generic, FromJSON)
+data CurrentWeather =
+  CurrentWeather
+    { coord :: Coord
+    , weather :: [Weather]
+    , base :: String
+    , main :: Main
+    , wind :: Wind
+    , clouds :: Clouds
+    , dt :: Int
+    , sys :: Sys
+    , id :: Int
+    , name :: String
+    , cod :: Int
+    }
+  deriving (Show, Generic, FromJSON)

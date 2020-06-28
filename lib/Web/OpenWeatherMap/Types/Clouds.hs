@@ -9,6 +9,8 @@ import GHC.Generics (Generic)
 
 import Data.Aeson (FromJSON)
 
-data Clouds = Clouds
-  { all :: Double
-  } deriving (Show, Generic, FromJSON)
+data Clouds =
+  Clouds
+    { all :: Double
+    }
+  deriving (Show, Generic, FromJSON)

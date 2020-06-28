@@ -11,11 +11,13 @@ import Data.Aeson (FromJSON)
 
 import Web.OpenWeatherMap.Types.Coord (Coord)
 
-data City = City
-  { name :: String
-  , country :: Maybe String
-  , coord :: Coord
-  , timezone :: Int
-  , sunset :: Int
-  , sunrise :: Int
-  } deriving (Show, Generic, FromJSON)
+data City =
+  City
+    { name :: String
+    , country :: Maybe String
+    , coord :: Coord
+    , timezone :: Int
+    , sunset :: Int
+    , sunrise :: Int
+    }
+  deriving (Show, Generic, FromJSON)
