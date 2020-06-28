@@ -30,5 +30,4 @@ instance HasClient m api => HasClient m (Location :> api) where
       addParams (Coord lat lon) =
         appendToQueryString "lat" (Just $ toQueryParam lat) .
         appendToQueryString "lon" (Just $ toQueryParam lon)
-  hoistClientMonad pm _ f cl =
-    \a -> hoistClientMonad pm (Proxy :: Proxy api) f (cl a)
+  hoistClientMonad pm _ f cl = hoistClientMonad pm (Proxy :: Proxy api) f . cl
