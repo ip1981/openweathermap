@@ -4,6 +4,12 @@
   * (* BREAKING *) Made Location a part of the API to
     reduce code duplication.
 
+  * (* BREAKING *) Made all query parameters required.
+
+  * Changed -c to -q for the command line utility.
+
+  * Added forecast weather API.
+
 
 0.1.0
 =====
