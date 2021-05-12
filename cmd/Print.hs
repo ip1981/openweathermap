@@ -6,7 +6,9 @@ module Print
 import Data.List (intercalate)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.LocalTime (TimeZone, minutesToTimeZone, utcToZonedTime)
+import Text.Printf (printf)
 
+import Web.OpenWeatherMap.Formulas (absoluteHumidity)
 import qualified Web.OpenWeatherMap.Types.City as City
 import qualified Web.OpenWeatherMap.Types.Coord as Coord
 import qualified Web.OpenWeatherMap.Types.CurrentWeather as CW
@@ -26,6 +28,7 @@ printCurrectWeather cw =
        ",  "
        [ w
        , showHumidity mainw
+       , showAbsoluteHumidity mainw
        , showPressure mainw
        , showTemp mainw
        , showWind wind
@@ -52,6 +55,7 @@ showForecast tz fc =
     ", "
     [ showWeather (FC.weather fc)
     , showHumidity mainw
+    , showAbsoluteHumidity mainw
     , showPressure mainw
     , showTemp mainw
     , showWind (FC.wind fc)
@@ -85,6 +89,12 @@ showHumidity m = "H " ++ show hm ++ " %"
   where
     hm :: Int
     hm = round . Main.humidity $ m
+
+showAbsoluteHumidity :: Main.Main -> String
+showAbsoluteHumidity m = "ρ " ++ rho ++ " g/m³"
+  where
+    r = absoluteHumidity m
+    rho = maybe "??" (printf "%0.2f") r
 
 -- https://en.wikipedia.org/wiki/Millimeter_of_mercury
 showPressure :: Main.Main -> String
