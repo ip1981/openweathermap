@@ -23,6 +23,8 @@ printCurrectWeather :: CW.CurrentWeather -> IO ()
 printCurrectWeather cw =
   putStrLn
     (place ++
+     ", " ++
+     time ++
      ": " ++
      intercalate
        ",  "
@@ -34,6 +36,8 @@ printCurrectWeather cw =
        , showWind wind
        ])
   where
+    tz = secondsToTimeZone (CW.timezone cw)
+    time = showLocalTime tz (CW.dt cw)
     w = showWeather $ CW.weather cw
     place = showLocation (CW.name cw) (Sys.country . CW.sys $ cw) (CW.coord cw)
     mainw = CW.main cw
@@ -42,14 +46,17 @@ printCurrectWeather cw =
 printForecastWeather :: FW.ForecastWeather -> IO ()
 printForecastWeather fw = do
   let c = FW.city fw
-      tz = minutesToTimeZone (City.timezone c `div` 60)
+      tz = secondsToTimeZone (City.timezone c)
       place = showLocation (City.name c) (City.country c) (City.coord c)
   putStrLn place
   mapM_ putStrLn (showForecast tz <$> FW.list fw)
 
+secondsToTimeZone :: Int -> TimeZone
+secondsToTimeZone s = minutesToTimeZone (s `div` 60)
+
 showForecast :: TimeZone -> FC.Forecast -> String
 showForecast tz fc =
-  localtime ++
+  showLocalTime tz (FC.dt fc) ++
   ": " ++
   intercalate
     ", "
@@ -61,9 +68,11 @@ showForecast tz fc =
     , showWind (FC.wind fc)
     ]
   where
-    localtime =
-      show . utcToZonedTime tz . posixSecondsToUTCTime . fromIntegral $ FC.dt fc
     mainw = FC.main fc
+
+showLocalTime :: TimeZone -> Int -> String
+showLocalTime tz =
+  show . utcToZonedTime tz . posixSecondsToUTCTime . fromIntegral
 
 showLocation :: String -> Maybe String -> Coord.Coord -> String
 showLocation name country coord =
@@ -82,7 +91,7 @@ showCoord coord =
   "°, " ++ maybe "?" show (Coord.lon coord) ++ "°)"
 
 showWeather :: [Weather.Weather] -> String
-showWeather w = intercalate "," $ Weather.main <$> w
+showWeather w = intercalate "/" $ Weather.main <$> w
 
 showHumidity :: Main.Main -> String
 showHumidity m = "H " ++ show hm ++ " %"

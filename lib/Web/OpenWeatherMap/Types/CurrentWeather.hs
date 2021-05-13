@@ -29,6 +29,7 @@ data CurrentWeather =
     , clouds :: Clouds
     , dt :: Int
     , sys :: Sys
+    , timezone :: Int
     , id :: Int
     , name :: String
     , cod :: Int
