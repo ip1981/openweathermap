@@ -51,7 +51,8 @@ library
         http-client -any,
         servant -any,
         servant-client >=0.16,
-        servant-client-core -any
+        servant-client-core -any,
+        text
 
 executable openweathermap
     main-is:          Main.hs

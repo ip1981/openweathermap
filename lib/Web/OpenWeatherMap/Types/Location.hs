@@ -15,6 +15,7 @@ import Servant.API ((:>))
 import Servant.Client (Client, HasClient, clientWithRoute, hoistClientMonad)
 import Servant.Client.Core.Request (appendToQueryString)
 import Web.HttpApiData (toQueryParam)
+import Data.Text.Encoding (encodeUtf8)
 
 -- | Various ways to specify location.
 data Location
@@ -26,8 +27,8 @@ instance HasClient m api => HasClient m (Location :> api) where
   clientWithRoute pm Proxy req loc =
     clientWithRoute pm (Proxy :: Proxy api) (addParams loc req)
     where
-      addParams (Name q) = appendToQueryString "q" (Just $ toQueryParam q)
+      addParams (Name q) = appendToQueryString "q" $ (Just . encodeUtf8 . toQueryParam) q
       addParams (Coord lat lon) =
-        appendToQueryString "lat" (Just $ toQueryParam lat) .
-        appendToQueryString "lon" (Just $ toQueryParam lon)
+        appendToQueryString "lat" ((Just . encodeUtf8 . toQueryParam) lat) .
+        appendToQueryString "lon" ((Just . encodeUtf8 . toQueryParam) lon)
   hoistClientMonad pm _ f cl = hoistClientMonad pm (Proxy :: Proxy api) f . cl
