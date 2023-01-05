@@ -9,7 +9,6 @@ module Web.OpenWeatherMap.Types.Location
   ( Location(..)
   ) where
 
-import Data.ByteString (ByteString)
 import Data.Proxy (Proxy(..))
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
