@@ -49,7 +49,7 @@ library
         aeson -any,
         bytestring -any,
         http-api-data -any,
-        http-client -any,
+        http-client-tls -any,
         servant -any,
         servant-client >=0.19,
         servant-client-core -any,

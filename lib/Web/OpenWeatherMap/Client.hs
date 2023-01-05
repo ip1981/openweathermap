@@ -6,12 +6,12 @@ module Web.OpenWeatherMap.Client
   , getForecast
   ) where
 
-import Network.HTTP.Client (defaultManagerSettings, newManager)
+import Network.HTTP.Client.TLS (newTlsManager)
 import Servant.Client
   ( BaseUrl(BaseUrl)
   , ClientEnv
   , ClientError
-  , Scheme(Http)
+  , Scheme(Https)
   , mkClientEnv
   , runClientM
   )
@@ -40,10 +40,8 @@ getForecast appid loc =
 
 defaultEnv :: IO ClientEnv
 defaultEnv = do
-  manager <- newManager defaultManagerSettings
+  manager <- newTlsManager
   return $ mkClientEnv manager baseUrl
 
--- XXX openweathermap.org does not support HTTPS,
--- XXX appid is passed in clear text. Oops.
 baseUrl :: BaseUrl
-baseUrl = BaseUrl Http "api.openweathermap.org" 80 "/data/2.5"
+baseUrl = BaseUrl Https "api.openweathermap.org" 443 "/data/2.5"
