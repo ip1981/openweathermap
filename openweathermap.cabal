@@ -1,9 +1,8 @@
 cabal-version:      1.20
 name:               openweathermap
-version:            0.2.0
+version:            0.3.0
 license:            PublicDomain
 license-file:       LICENSE
-copyright:          2017, Igor Pashev <pashev.igor@gmail.com>
 maintainer:         Igor Pashev <pashev.igor@gmail.com>
 author:             Igor Pashev
 synopsis:           Access data at OpenWeatherMap
